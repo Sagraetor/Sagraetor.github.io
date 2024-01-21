@@ -28,64 +28,149 @@ const info = {
 
 const halfStar = '<img src="./assets/halfstar.png" alt="" style= "object-fit: contain; height: 100%;"></img>'
 const fullStar = '<img src="./assets/fullstar.png" alt="" style= "object-fit: contain; height: 100%;"></img>'
+const noStar = '<img src="./assets/nostar.png" alt="" style= "object-fit: contain; height: 100%;"></img>'
+const container = document.getElementById("tabDisplay")
 
 var currentSkillCount = 0
 var currentRows = 0
 var active = false
 
-function drawStar(){
-    var starContainers = document.getElementsByClassName("star-container");
-
-    for (var i = 0; i < starContainers.length; i++){
-        var innerHTML = ''
-        for (var j = 0; j < 5; j++)
-            if (j > (starContainers[i].dataset.rating -1)){
-                innerHTML += halfStar
-            } else {
-                innerHTML += fullStar
-            }
-        starContainers[i].innerHTML=innerHTML;
-    }
+function addEntry(number){
+    var newRow = document.createElement("div")
+    newRow.className = "tab-row"
+    newRow.innerHTML = '<div class="tab-text", id = "skillEntry' + number +'"></div><div class="star-container" data-rating=' + 0 + '></div>'
+    container.appendChild(newRow)
 }
 
-function generateTab(category){
-    var container = document.getElementById("tabDisplay")
-    container.innerHTML = ''
-    for (var skill in category){
-        var newRow = document.createElement("div")
-        newRow.className = "tab-row"
-        newRow.innerHTML = '<div class="tab-text">' + skill + '</div> <div class="star-container" data-rating=' + category[skill] + '></div>'
-        container.appendChild(newRow)
+function drawStar(){
+    function replaceStar(starContainer, fullStarCount, decreasing = true){
+        for(var i = 0; i < 5; i ++){
+            if (i < fullStarCount){
+                starContainer.childNodes[i].src = "./assets/fullstar.png"
+            }else if(decreasing){
+                starContainer.childNodes[i].src = "./assets/halfstar.png"
+            }
+        }
     }
+
+    function createStar(starContainer){
+        var innerHTML = ''
+        for(var i = 0; i < 5; i ++){
+            innerHTML += noStar
+        }
+        starContainer.innerHTML=innerHTML
+    }
+
+    var starContainers = document.getElementsByClassName("star-container");
+    var starAnimation = gsap.timeline()
+
+    starAnimation.to(starContainers, {onStart: () => {
+        for (var i = 0; i < starContainers.length; i++){
+            if (!starContainers[i].hasChildNodes()){createStar(starContainers[i])}
+        }
+    }}, 0)
+    starAnimation.to(starContainers, {onStart: () => {
+        for (var i = 0; i < starContainers.length; i++){
+            replaceStar(starContainers[i], (1), false)
+        }
+    }}, 0.1)
+    starAnimation.to(starContainers, {onStart: () => {
+        for (var i = 0; i < starContainers.length; i++){
+            replaceStar(starContainers[i], (2), false)
+        }
+    }}, 0.2)
+    starAnimation.to(starContainers, {onStart: () => {
+        for (var i = 0; i < starContainers.length; i++){
+            replaceStar(starContainers[i], (3), false)
+        }
+    }}, 0.3)
+    starAnimation.to(starContainers, {onStart: () => {
+        for (var i = 0; i < starContainers.length; i++){
+            replaceStar(starContainers[i], (4), false)
+        }
+    }}, 0.4)
+    starAnimation.to(starContainers, {onStart: () => {
+        for (var i = 0; i < starContainers.length; i++){
+            replaceStar(starContainers[i], (5), false)
+        }
+    }}, 0.5)
+    starAnimation.to(starContainers, {onStart: () => {
+        for (var i = 0; i < starContainers.length; i++){
+            if (starContainers[i].dataset.rating < 5){replaceStar(starContainers[i], (4))}
+        }
+    }}, 0.6)
+    starAnimation.to(starContainers, {onStart: () => {
+        for (var i = 0; i < starContainers.length; i++){
+            if (starContainers[i].dataset.rating < 4){replaceStar(starContainers[i], (3))}
+        }
+    }}, 0.7)
+    starAnimation.to(starContainers, {onStart: () => {
+        for (var i = 0; i < starContainers.length; i++){
+            if (starContainers[i].dataset.rating < 3){replaceStar(starContainers[i], (2))}
+        }
+    }}, 0.8)
+    starAnimation.to(starContainers, {onStart: () => {
+        for (var i = 0; i < starContainers.length; i++){
+            if (starContainers[i].dataset.rating < 2){replaceStar(starContainers[i], (1))}
+        }
+    }}, 0.9)
+    starAnimation.to(starContainers, {onStart: () => {
+        for (var i = 0; i < starContainers.length; i++){
+            if (starContainers[i].dataset.rating < 1){replaceStar(starContainers[i], (0))}
+        }
+    }}, 1)
+    starAnimation.play()
+}
+
+function populateTab(category){
+    skillnames = Object.keys(category)
+    var skillRenameTimeline = gsap.timeline()
+    for (var i = 0; i< skillnames.length; i++){
+        skillRenameTimeline.to("#skillEntry" + i, {duration: .5, text: skillnames[i]}, 0)
+        container.children[i].children[1].dataset.rating = category[skillnames[i]]
+    }
+    skillRenameTimeline.play()
     drawStar()
 }
 
 function resizeTab(working, skillCount, rows){
-    var container = document.getElementById("tabDisplay")
-    const state = Flip.getState(container);
+    function end(){
+        currentSkillCount = skillCount
+        currentRows = rows
+        populateTab(working)}
 
-    if (currentSkillCount > skillCount){
-        generateTab(working)
-        container.style.gridTemplateRows = '5vh '.repeat(rows)
+    if (skillCount < currentSkillCount){
+        for (var i = currentSkillCount; i != skillCount; i--){
+            container.removeChild(container.lastElementChild)
+        }
 
-        Flip.from(state, {
-            duration: Math.sqrt(currentRows - rows) / 5,
-            ease: "power1.inOut",
-          });
+        if (rows < currentRows){
+            const state = Flip.getState(container);
+            container.style.gridTemplateRows = '5vh '.repeat(rows)
+            Flip.from(state, {
+                duration: Math.sqrt(currentRows - rows) / 5,
+                ease: "power1.inOut",
+                onComplete: end()
+            });
+        }else{end()}
 
-    }else if(currentRows < rows){ 
-
-        gsap.to(".tab-display", {
-        duration: Math.sqrt(rows - currentRows) / 5,
-        ease: 'power1.out',
-        gridTemplateRows: '5vh '.repeat(rows),
-        onComplete: generateTab,
-        onCompleteParams: [working]
-    })
-    }else{
-        generateTab(working)
-    }
-    
+    } else if (skillCount > currentSkillCount){
+        if (rows > currentRows){
+            gsap.to(".tab-display", {
+                duration: Math.sqrt(rows - currentRows) / 5,
+                ease: 'power1.out',
+                gridTemplateRows: '5vh '.repeat(rows),
+                onComplete: () => {
+                    for (var i = currentSkillCount; i != skillCount; i++){
+                        addEntry(i)
+                    }
+                    end()}
+            })
+        }else{
+            addEntry(skillCount-1)
+            end()
+        }
+    } else{end()}
 }
 
 function switchTab(category){
@@ -101,8 +186,7 @@ function switchTab(category){
 
     resizeTab(working, skillCount, rows)
     
-    currentSkillCount = skillCount
-    currentRows = rows
+    
 }
 
 ScrollTrigger.create({

@@ -59,7 +59,7 @@
     </div>
 
     <div class = "home-container" id="home">
-        Irfan Haziq
+        
     </div>
 
     <div class="content-container" id="about" style="grid-template-columns: 50% 50%; column-gap: 5%;">
@@ -87,7 +87,7 @@
         <div style="grid-column: 1/3; text-align: center; margin-top: 5%;">
             <p style="text-align: center";><em>I'm good at</em></p>
             <div style = "display: flex; flex-direction: row; justify-content: center; margin-top: 5%;">
-                <div class="tab-changer tab-active" onclick="switchTab('programming')" id = "tabprogramming">Programming</div>
+                <div class="tab-changer" onclick="switchTab('programming')" id = "tabprogramming">Programming</div>
                 <div class="tab-changer" onclick="switchTab('art')" id = "tabart">Art</div>
                 <div class="tab-changer" onclick="switchTab('data')" id = "tabdata">Data</div>
                 <div class="tab-changer" onclick="switchTab('gameDev')" id = "tabgameDev">Game Dev</div>
@@ -136,10 +136,10 @@
         <p style="text-align: center";><em>I'd Love Your Feedback</em></p>
         <div class="contact-container">
             <a href="https://discordapp.com/users/234874896931487745" style= "height: 100%" target="_blank" rel="noopener noreferrer"><img src="./contact/1.png" alt="" height="100%" width="auto"></a>
-            <a href="mailto:xxirfanhaziqxx@gmail.com" style= "height: 100%" target="_blank" rel="noopener noreferrer"><img src="./contact/2.png" alt="" height="100%" width="auto"></a>
+            <a href="mailto:irfnhazq@gmail.com" style= "height: 100%" target="_blank" rel="noopener noreferrer"><img src="./contact/2.png" alt="" height="100%" width="auto"></a>
             <a href="https://t.me/Sagrator" style= "height: 100%" target="_blank" rel="noopener noreferrer"><img src="./contact/3.png" alt="" height="100%" width="auto"></a>
             <a href="https://github.com/Sagraetor?tab=repositories" style= "height: 100%" target="_blank" rel="noopener noreferrer"><img src="./contact/4.png" alt="" height="100%" width="auto"></a>
-            <a href="" style= "height: 100%" target="_blank" rel="noopener noreferrer"><img src="./contact/5.png" alt="" height="100%" width="auto"></a>
+            <a href="https://www.linkedin.com/in/irfan-haziq-757b682ab/" style= "height: 100%" target="_blank" rel="noopener noreferrer"><img src="./contact/5.png" alt="" height="100%" width="auto"></a>
             <a href="https://api.whatsapp.com/send?phone=60169225854" style= "height: 100%" target="_blank" rel="noopener noreferrer"><img src="./contact/6.png" alt="" height="100%" width="auto"></a>
         </div>
     </div>
@@ -158,6 +158,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/ScrollTrigger.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Flip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/TextPlugin.min.js"></script>
     <script src="circles.js"></script>
     <script src="skills.js"></script>
 
@@ -206,6 +207,17 @@
             }
         }
         })
+
+        var homeTimeline = gsap.timeline()
+        homeTimeline.to(".home-container", {ease: "none", text: "Hello!", duration: .5}, 0)
+        homeTimeline.to(".home-container", {ease: "none", text: "", duration: .5}, ">.5")
+        homeTimeline.to(".home-container", {ease: "none", text: "Selamat Datang", duration: 1}, ">")
+        homeTimeline.to(".home-container", {ease: "none", text: "", duration: 1}, ">.5")
+        homeTimeline.to(".home-container", {ease: "none", text: "Welcome", duration: .5}, ">")
+        homeTimeline.to(".home-container", {ease: "none", text: "", duration: .5}, ">.5")
+        homeTimeline.to(".home-container", {ease: "none", text: "I'm Irfan", duration: .7}, ">")
+        homeTimeline.to(".home-container", {ease: "none", text: "Irfan Haziq", duration: .8}, ">1")
+        homeTimeline.play()
 
         
     </script>
