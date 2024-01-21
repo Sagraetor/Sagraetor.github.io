@@ -1,0 +1,220 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Lato:ital,wght@0,400;0,900;1,400&display=swap');
+
+body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif;}
+h1,h2,h3,h4,h5,h6 {
+    color: var(--darkGreen);
+    text-align: center;
+}
+
+h2{
+    font-family: "Lato", sans-serif;
+    font-size: 1.5em;
+}
+
+b {
+    color: var(--darkGreen);
+    font-weight: bolder;
+}
+
+p {
+    font-family: "Lato", sans-serif;
+    font-size: 1.25em;
+}
+
+p.double {
+    line-height: 2;
+}
+
+.top-bar {
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    color: var(--darkGreen);
+}
+
+.bar-text{
+    font-family: 'Lato', sans-serif;
+    font-size: 1.3em;
+    padding: .7em;
+    text-decoration: none;
+    font-weight: 900;
+    color: var(--green);
+}
+
+.hover-dark:hover{
+    cursor: pointer;
+    background-color: #4d4b4b;
+}
+
+.hover-light:hover{
+    cursor: pointer;
+    background-color: #a2aaac
+}
+
+footer {
+    background-color: var(--green);
+    color: var(--white);
+    text-align: center;
+    position: absolute;
+    margin: 0px;
+    left: 0;
+    right: 0;
+    height: 15vh;
+    z-index: 3;
+}
+
+.footer-text {
+    position: relative;
+    font-family: 'Lato', sans-serif;
+    font-size: 30px;
+    text-decoration: none;
+    font-weight: 900;
+    cursor: pointer;
+    color: var(--black);
+}
+
+.content-container{
+    background-color: var(--white);
+    display: grid;
+    margin-top: 0px;
+    margin-left: 5%;
+    margin-right: 5%;
+    position: static;
+    top: 100vh;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 15%;
+    padding-right: 15%;
+    border-radius: 10px;
+    text-align: left;
+    align-items: center;
+    color: var(--black);
+    z-index: 10;
+}
+
+.center-text{
+    text-align: center;
+}
+
+.gap{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: static;
+    padding: auto;
+    background-color: rgba(0, 0, 0, 0);
+    color: var(--green);
+    text-align: center;
+    font-size: 3em;
+    height: 50vh;
+    z-index: 10
+}
+
+.home-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: static;
+    background-color: rgba(0, 0, 0, 0);
+    color: var(--green);
+    text-align: center;
+    font-size: 5em;
+    height: 100vh;
+}
+
+.project-container{
+    display: block;
+    background-color: var(--darkGreen);
+    position: static;
+    border-radius: 10px;
+    width: 90%;
+    color: var(--white);
+    margin-left: 2.5%;
+    padding-left: 3%;
+    padding-right: 3%;
+    text-align: center;
+}
+
+.contact-container{
+    display: flex;
+    align-items: center;
+    height: 6vh;
+    justify-content: center;
+    gap: 5%;
+    filter: invert(21%) sepia(75%) saturate(447%) hue-rotate(113deg) brightness(105%) contrast(101%);
+}
+
+.tab-changer{
+    display: flexbox;
+    background-color: var(--green);
+    color: var(--black);
+    font-family: 'Lato', sans-serif;
+    width: 25%;
+    height: 100%;
+    font-size: 1.5em;
+    font-weight: 900;
+    margin: 0;
+    border: 0;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    padding-top: 3%;
+    padding-bottom: 3%;
+}
+
+.tab-changer:not(.tab-active):hover{
+    cursor: pointer;
+    background-color: #1bffc2;
+}
+
+.tab-active{
+    background-color: var(--darkGreen);
+    color: var(--white);
+}
+
+.tab-display{
+    display: grid;
+    grid-template-columns: 50% 50%;
+    row-gap: 1vh;
+    background-color: var(--darkGreen);
+    width: 100%;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    text-align: left;
+    align-items: center;
+    padding-top: 1vh;
+    padding-bottom: 1vh;
+    line-height: normal;
+}
+
+.tab-row{
+    display: flex;
+    justify-content: space-between;
+}
+
+.tab-row:hover{
+    font-weight: 900;
+    .star-container{filter: brightness(0) saturate(100%) invert(93%) sepia(98%) saturate(1146%) hue-rotate(82deg) brightness(88%) contrast(98%);}
+}
+
+.tab-text{
+    display: flex;
+    color: var(--white);
+    font-family: 'Lato', sans-serif;
+    font-size: 1.5em;
+    text-align: left;
+    padding-left: 5%;
+    padding-right: 5%;
+    align-items: center;
+    font-weight: inherit;
+}
+
+.star-container{
+    display: flex;
+    height: 2em;
+    align-items: center;
+    justify-content: center;
+    gap: 2%;
+    margin: 0 2% 0 2%;
+}

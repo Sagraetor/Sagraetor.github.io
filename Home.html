@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+
+    <title>Irfan Haziq</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        :root {
+            --black:  #333232;
+            --white:  #dae3e5;
+            --green:  #08DDA5;
+            --darkGreen: #06513D;
+            --blue:   #4281a4;
+            --orange: #ea8c55;
+        }
+        .circle {
+            display: inline-block;
+            background: var(--white);
+            border-radius: 50%;
+            height: 10px;
+            width: 10px;
+            margin: 0;
+            position: absolute;
+            z-index: -1;
+        }
+
+        .bg{
+            display: block;
+            margin: 0;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: -1;
+        }
+    </style>
+
+
+</head>
+
+<body style="background-color: var(--black)">
+
+    <div class="top-bar", id="topBar">
+        <a onclick="gsap.to(window, { duration: .5, scrollTo: {y: 0, autoKill: true}})" class="bar-text hover-dark" style="padding: 0;">
+            <img src="./assets/sagrator-icon.png" style= "object-fit: contain; height: 2.6em;"></a>
+        <a onclick="gsap.to(window, { duration: .5, scrollTo: {y: '#about', offsetY: vh(3), autoKill: true }})" class="bar-text hover-dark">ABOUT</a>
+        <a onclick="gsap.to(window, { duration: .5, scrollTo: {y: '#projects', offsetY: vh(3), autoKill: true }})" class="bar-text hover-dark"> PROJECTS</a>
+        <a onclick="gsap.to(window, { duration: .5, scrollTo: {y: '#contact', offsetY: vh(3), autoKill: true }})" class="bar-text hover-dark"> CONTACT</a>
+    </div>
+
+    <div class = "bg", id="div1">
+        <canvas id="myCanvas" style="z-index: -1"></canvas>
+    </div>
+
+    <div class = "home-container" id="home">
+        Irfan Haziq
+    </div>
+
+    <div class="content-container" id="about" style="grid-template-columns: 50% 50%; column-gap: 5%;">
+        <div style="grid-column: 1/3;">
+            <h2>ABOUT ME</h2>
+            <p style="text-align: center";><em>Passion For Programming</em></p>
+            
+       </div>  
+
+        <div style="grid-column: 1"> 
+            <img src="./assets/Sagrator-square.png" alt="Photo of Me" style = "object-fit: contain;" width="100%">
+            <p style="text-align: center;"><b>Irfan Haziq bin Mohd Rathuan</b></p>
+        </div>
+
+        <div style="grid-column: 2"> 
+            <p class="double"> 
+                Hi! I'm Irfan. I'm currently in my second year of my computer science degree at Universiti Teknologi Petronas. 
+                My journey into this field started when I was playing a programming based game about a decade ago.  
+                Over the past two years, I've learnt tons of stuff! From programming languages and algorithms to computer networks and software engineering. 
+                Now, as I'm approaching my internship, I aim to act like a sponge and absorb as much knowledge as I can! <br>
+                I also enjoy gaming on the side. I'm especially fond of games like Valorant and Rainbow Six: Siege
+            </p>
+        </div>
+        
+        <div style="grid-column: 1/3; text-align: center; margin-top: 5%;">
+            <p style="text-align: center";><em>I'm good at</em></p>
+            <div style = "display: flex; flex-direction: row; justify-content: center; margin-top: 5%;">
+                <div class="tab-changer tab-active" onclick="switchTab('programming')" id = "tabprogramming">Programming</div>
+                <div class="tab-changer" onclick="switchTab('art')" id = "tabart">Art</div>
+                <div class="tab-changer" onclick="switchTab('data')" id = "tabdata">Data</div>
+                <div class="tab-changer" onclick="switchTab('gameDev')" id = "tabgameDev">Game Dev</div>
+            </div>
+            
+            <div class="tab-display", id="tabDisplay">
+            </div>
+
+        </div>
+    </div>
+
+    <div class="gap">
+        <p>PROJECTS</p>
+    </div>
+
+    <div class="content-container" id="projects" style="grid-template-columns: 50% 50%">
+        <div style="grid-column: 1/3">
+            <h2>MY WORKS</h2>
+            <p style="text-align: center";><em>Made With Care</em></p>
+        </div>
+        
+
+        <div class="project-container" style="grid-column: 1">
+            <h3 style="color: var(--white)">Chat Conquest</h3>
+            <img src = "./projects/1.png" alt="Chat Conquest" width="300px" height="300px">
+            <p class="double" style="color: var(--white); text-align: left">
+                A pygame based pixel art game about capturing towers and castles. The twist? Chat Conquest is hooked up to a TikTok Live Chat api which enables it to be played using Tiktok's live chat feature. 
+                The viewers are the players and they play using the livechat. 
+                This is my very first game and the assets are made entirely by me.</h3>
+        </div>
+
+        <div class="project-container" style="grid-column: 2">
+            <h3 style="color: var(--white)">Vuzix Blade Object Recognizer</h3>
+            <img src = "./projects/2.png" alt="Vuzix Blade" width="300px" height="300px">
+            <p class="double" style="color: var(--white); text-align: left">The Vuzix Blade is a pair of alternate reality glasses capable of displaying images directly onto the lens. 
+                While working under my lecturer, I have created a machine learning programme specifically for the Vuzix Blade Glasses using Tensorflow Lite's api to give the glasses some object recognition capabilities</h3>
+        </div>
+    </div>
+
+    <div class="gap">
+        <p>CONTACT</p>
+    </div>
+
+    <div class="content-container" id="contact">
+        <h2>REACH OUT</h2>
+        <p style="text-align: center";><em>I'd Love Your Feedback</em></p>
+        <div class="contact-container">
+            <a href="https://discordapp.com/users/234874896931487745" style= "height: 100%"><img src="./contact/1.png" alt="" height="100%" width="auto"></a>
+            <a href="mailto:xxirfanhaziqxx@gmail.com" style= "height: 100%"><img src="./contact/2.png" alt="" height="100%" width="auto"></a>
+            <a href="https://t.me/Sagrator" style= "height: 100%"><img src="./contact/3.png" alt="" height="100%" width="auto"></a>
+            <a href="https://github.com/Sagraetor?tab=repositories" style= "height: 100%"><img src="./contact/4.png" alt="" height="100%" width="auto"></a>
+            <a href="" style= "height: 100%"><img src="./contact/5.png" alt="" height="100%" width="auto"></a>
+            <a href="https://api.whatsapp.com/send?phone=60169225854" style= "height: 100%"><img src="./contact/6.png" alt="" height="100%" width="auto"></a>
+        </div>
+    </div>
+
+    <div class="gap" style="height: 25vh;">
+    </div>
+
+    <footer>
+        <p><i style="color: var(--black);">Thanks for reaching the end</i></p>
+        <a onclick="gsap.to(window, { duration: .5, scrollTo: 0})" class="footer-text">BACK TO THE TOP?</a>
+    </footer>
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Flip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js"></script>
+    <script src="circles.js"></script>
+    <script src="skills.js"></script>
+
+    <script>
+        function vh(value){
+            return String(window.innerWidth * (value/100))
+        }
+
+        ScrollTrigger.create({
+        trigger: document.getElementById("about"),
+        animation:gsap.fromTo(".top-bar", {
+
+        backgroundColor: 'rgba(218, 227, 229, 0)',
+        boxShadow: 0}, {
+            
+        backgroundColor: 'rgba(218, 227, 229, 1)',
+        boxShadow: '0px 1px 3px 1px',
+        duration: .25,
+        ease: 'power1.in'}),
+
+        toggleActions:"restart none none reverse",
+        preventOverlaps:true,
+        })
+
+        ScrollTrigger.create({
+        trigger: document.getElementById("about"),
+        animation:gsap.fromTo(".bar-text", {
+        color: 'var(--green)'}, {
+
+        color: 'var(--darkGreen)',
+        duration: .1,
+        delay: 0}),
+        
+        toggleActions:"restart none none reverse",
+        preventOverlaps:false,
+        onEnter: () => {
+            var toChange = document.getElementsByClassName("bar-text")
+            for (var i = 0; i < toChange.length; i++){
+                toChange[i].className = "bar-text hover-light"
+            }
+        },
+        onLeaveBack: () => {
+            var toChange = document.getElementsByClassName("bar-text")
+            for (var i = 0; i < toChange.length; i++){
+                toChange[i].className = "bar-text hover-dark"
+            }
+        }
+        })
+
+        
+    </script>
+
+
+</body>
+
+</html>
