@@ -21,8 +21,18 @@ p {
     font-size: 1.25em;
 }
 
-p.double {
+p.double{
     line-height: 2;
+}
+
+p.contact:hover{
+    cursor: pointer;
+}
+
+p.contact img{
+    height: 1em; 
+    width:auto;
+    filter: brightness(0) saturate(100%) invert(11%) sepia(1%) saturate(990%) hue-rotate(314deg) brightness(100%) contrast(77%);
 }
 
 .top-bar {
@@ -103,7 +113,7 @@ footer {
     justify-content: center;
     align-items: center;
     position: static;
-    padding: auto;
+    margin: auto;
     background-color: rgba(0, 0, 0, 0);
     color: var(--green);
     text-align: center;
