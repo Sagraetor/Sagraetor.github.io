@@ -99,7 +99,19 @@ function spawnMovingCircle() {
     let anim = gsap.to(newCircle, {left: endPos[0] + "%", top: endPos[1] + "%", ease: "none", duration: distance/5, onComplete: function() {circleContainer.removeChild(newCircle)}})
 }
 
+function setSpawnInterval() {
+    clearInterval(spawnMovingCircleInterval)
+    if (window.innerWidth <= 768) {
+        spawnMovingCircleInterval = setInterval(spawnMovingCircle, 360);
+    } else {
+        spawnMovingCircleInterval = setInterval(spawnMovingCircle, 180);
+    }
+}
+
+var spawnMovingCircleInterval
+
 window.addEventListener('resize', resizeCanvas, false);
+window.addEventListener('resize', setSpawnInterval, false);
+setSpawnInterval()
 resizeCanvas()
-setInterval(spawnMovingCircle, 180);
 setInterval(drawLine, 10);
