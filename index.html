@@ -59,7 +59,7 @@
     </div>
 
     <div class = "home-container" id="home">
-        
+        Selamat Datang
     </div>
 
     <div class="content-container" id="about">
@@ -213,14 +213,15 @@
         })
 
         var homeTimeline = gsap.timeline()
-        homeTimeline.to(".home-container", {ease: "none", text: "Hello!", duration: .5}, 0)
+        homeTimeline.to(".home-container", {ease: "none", text: "Welcome", duration: 1}, "1")
         homeTimeline.to(".home-container", {ease: "none", text: "", duration: .5}, ">.5")
-        homeTimeline.to(".home-container", {ease: "none", text: "Selamat Datang", duration: 1}, ">")
-        homeTimeline.to(".home-container", {ease: "none", text: "", duration: 1}, ">.5")
-        homeTimeline.to(".home-container", {ease: "none", text: "Welcome", duration: .5}, ">")
-        homeTimeline.to(".home-container", {ease: "none", text: "", duration: .5}, ">.5")
-        homeTimeline.to(".home-container", {ease: "none", text: "I'm Irfan", duration: .7}, ">")
-        homeTimeline.to(".home-container", {ease: "none", text: "Irfan Haziq", duration: .8}, ">1")
+        homeTimeline.to(".home-container", {ease: "none", text: "I'm a programmer", duration: .7}, ">")
+        homeTimeline.to(".home-container", {ease: "none", text: {value: "I'm a developer", type: "diff"}, duration: .5}, ">.1")
+        homeTimeline.to(".home-container", {ease: "none", text: {value: "I'm a student", type: "diff"}, duration: .5}, ">.1")
+        homeTimeline.to(".home-container", {ease: "none", text: {value: "I'm a gamer", type: "diff"}, duration: .5}, ">.1")
+        homeTimeline.to(".home-container", {ease: "none", text: {value: "I'm an innovator", type: "diff"}, duration: .5}, ">.1")
+        homeTimeline.to(".home-container", {ease: "none", text: {value: "I'm Irfan", type: "diff"}, duration: .5}, ">.1")
+        homeTimeline.to(".home-container", {ease: "none", text: {value: "Irfan Haziq", type: "diff"}, duration: .5}, ">.5")
         homeTimeline.play()
 
         
