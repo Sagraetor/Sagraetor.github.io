@@ -48,7 +48,7 @@
 
     <div class="top-bar", id="topBar">
         <a onclick="gsap.to(window, { duration: .5, scrollTo: {y: 0, autoKill: true}})" class="bar-text hover-dark" style="padding: 0;">
-            <img src="./assets/sagrator-icon.png" style= "object-fit: contain; height: 2.6em;"></a>
+            <img src="./assets/sagrator-icon.png"></a>
         <a onclick="gsap.to(window, { duration: .5, scrollTo: {y: '#about', offsetY: vh(3), autoKill: true }})" class="bar-text hover-dark">ABOUT</a>
         <a onclick="gsap.to(window, { duration: .5, scrollTo: {y: '#projects', offsetY: vh(3), autoKill: true }})" class="bar-text hover-dark"> PROJECTS</a>
         <a onclick="gsap.to(window, { duration: .5, scrollTo: {y: '#contact', offsetY: vh(3), autoKill: true }})" class="bar-text hover-dark"> CONTACT</a>
@@ -62,19 +62,19 @@
         
     </div>
 
-    <div class="content-container" id="about" style="grid-template-columns: 50% 50%; column-gap: 5%;">
-        <div style="grid-column: 1/3;">
+    <div class="content-container" id="about">
+        <div class="container-middle">
             <h2>ABOUT ME</h2>
             <p style="text-align: center";><em>Passion For Programming</em></p>
             
        </div>  
 
-        <div style="grid-column: 1"> 
-            <img src="./assets/me.jpg" alt="Photo of Me" style = "object-fit: contain; margin: 5% auto 0 auto; display: block; border-radius: 5vh;" height="100%">
+        <div> 
+            <img class="about" src="./assets/me.jpg" alt="Photo of Me" >
             <p style="text-align: center;"><b>Irfan Haziq bin Mohd Rathuan</b></p>
         </div>
 
-        <div style="grid-column: 2"> 
+        <div> 
             <p class="double"> 
                 Hi! I'm Irfan. I'm currently in my second year of my computer science degree at Universiti Teknologi Petronas. 
                 My journey into this field started when I was playing a programming based game about a decade ago.  
@@ -84,9 +84,9 @@
             </p>
         </div>
         
-        <div style="grid-column: 1/3; text-align: center; margin-top: 5%;">
+        <div class="container-middle" style="text-align: center; margin-top: 5%;">
             <p style="text-align: center";><em>I'm good at</em></p>
-            <div style = "display: flex; flex-direction: row; justify-content: center; margin-top: 5%;">
+            <div class="tab-container">
                 <div class="tab-changer" onclick="switchTab('programming')" id = "tabprogramming">Programming</div>
                 <div class="tab-changer" onclick="switchTab('art')" id = "tabart">Art</div>
                 <div class="tab-changer" onclick="switchTab('data')" id = "tabdata">Data</div>
@@ -103,25 +103,25 @@
         <p>PROJECTS</p>
     </div>
 
-    <div class="content-container" id="projects" style="grid-template-columns: 50% 50%">
-        <div style="grid-column: 1/3">
+    <div class="content-container" id="projects">
+        <div class="container-middle">
             <h2>MY WORKS</h2>
             <p style="text-align: center";><em>Made With Care</em></p>
         </div>
         
 
-        <div class="project-container" style="grid-column: 1">
+        <div class="project-container">
             <h3 style="color: var(--white)">Chat Conquest</h3>
-            <img src = "./projects/1.png" alt="Chat Conquest" width="300px" height="300px">
+            <img class="project" src = "./projects/1.png" alt="Chat Conquest">
             <p class="double" style="color: var(--white); text-align: left">
                 A pygame based pixel art game about capturing towers and castles. The twist? Chat Conquest is hooked up to a TikTok Live Chat api which enables it to be played using Tiktok's live chat feature. 
                 The viewers are the players and they play using the livechat. 
                 This is my very first game and the assets are made entirely by me.</h3>
         </div>
 
-        <div class="project-container" style="grid-column: 2">
+        <div class="project-container">
             <h3 style="color: var(--white)">Vuzix Blade Object Recognizer</h3>
-            <img src = "./projects/2.png" alt="Vuzix Blade" width="300px" height="300px">
+            <img class="project" src = "./projects/2.png" alt="Vuzix Blade">
             <p class="double" style="color: var(--white); text-align: left">The Vuzix Blade is a pair of alternate reality glasses capable of displaying images directly onto the lens. 
                 While working under my lecturer, I have created a machine learning programme specifically for the Vuzix Blade Glasses using Tensorflow Lite's api to give the glasses some object recognition capabilities</h3>
         </div>
@@ -131,7 +131,7 @@
         <p>CONTACT</p>
     </div>
 
-    <div class="content-container" style="justify-content: center;" id="contact">
+    <div class="content-container single-column" id="contact">
         <h2>REACH OUT</h2>
         <p style="text-align: center";><em>I'd Love Your Feedback</em></p>
         <div style="margin: auto;">
