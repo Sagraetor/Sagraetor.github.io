@@ -1,4 +1,4 @@
-const info = {
+const oldinfo = {
     programming: {
         "Python": 4,
         "Java": 4,
@@ -25,6 +25,48 @@ const info = {
         "Unity": 4
     }
 }
+
+const info = {
+    tab1: {
+        "Python": 4,
+        "Java": 4,
+        "C++": 3,
+        "C#": 3,
+        "Kotlin": 2,
+        "VB.Net": 2,
+        "JavaScript": 3,
+        "HTML": 4,
+        "CSS": 3,
+        "Flutter": 2,
+        "Prolog": 3,
+        "MatLab": 3,
+        "SQL": 4
+    },
+    tab2: {
+        "Power BI": 3,
+        "Microsoft Excel": 4,
+        "Power Query": 3,
+        "Power Automate": 3,
+        "Data Manipulation": 4,
+        "Data Transformation": 3
+    },
+    tab3: {
+        "Git/GitHub": 4,
+        "Visual Studio": 4,
+        "Android Studio": 3,
+        "Jupyter Notebook": 3,
+        "Microsoft Azure": 3,
+        "Power Apps": 3,
+        "Microsoft 365": 3
+    },
+    tab4: {
+        "Aseprite": 4,
+        "Blender": 3,
+        "Photoshop": 3,
+        "Illustrator": 2,
+        "Creativity": 3
+    }
+};
 
 const halfStar = '<img src="./assets/halfstar.png" alt="" style= "object-fit: contain; height: 100%;"></img>'
 const fullStar = '<img src="./assets/fullstar.png" alt="" style= "object-fit: contain; height: 100%;"></img>'
@@ -177,10 +219,10 @@ function switchTab(category){
     if (active){document.getElementsByClassName("tab-active")[0].className = "tab-changer"}
     active = true
 
-    eval("var sender = document.getElementById('tab" + category + "')")
+    var sender = document.getElementById(category);
     sender.className = "tab-changer tab-active"
 
-    eval("var working = info." + category)
+    var working = info[category];
     skillCount = Object.keys(working).length
     rows = Math.ceil(skillCount / 2)
 
@@ -193,5 +235,5 @@ ScrollTrigger.create({
     trigger: document.getElementById("projects"),
     once: true,
     preventOverlaps: false,
-    onEnter: () =>{ if(!active){switchTab("programming")}}
+    onEnter: () =>{ if(!active){switchTab("tab1")}}
     })

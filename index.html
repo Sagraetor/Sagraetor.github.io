@@ -50,7 +50,7 @@
         <a onclick="gsap.to(window, { duration: .5, scrollTo: {y: 0, autoKill: true}})" class="bar-text hover-dark" style="padding: 0;">
             <img src="./assets/sagrator-icon.png"></a>
         <a onclick="gsap.to(window, { duration: .5, scrollTo: {y: '#about', offsetY: vh(3), autoKill: true }})" class="bar-text hover-dark">ABOUT</a>
-        <a onclick="gsap.to(window, { duration: .5, scrollTo: {y: '#projects', offsetY: vh(3), autoKill: true }})" class="bar-text hover-dark"> PROJECTS</a>
+        <a onclick="switchTab('tab1'); gsap.to(window, { duration: .5, scrollTo: {y: '#projects', offsetY: vh(3), autoKill: true }})" class="bar-text hover-dark"> PROJECTS</a>
         <a onclick="gsap.to(window, { duration: .5, scrollTo: {y: '#contact', offsetY: vh(3), autoKill: true }})" class="bar-text hover-dark"> CONTACT</a>
     </div>
 
@@ -59,41 +59,45 @@
     </div>
 
     <div class = "home-container" id="home">
-        Selamat Datang
+        <div class="name">Welcome</div>
+        <div class="titles">Developer | CS Student | Problem Solver</div>
     </div>
 
     <div class="content-container" id="about">
         <div class="container-middle">
             <h2>ABOUT ME</h2>
-            <p style="text-align: center";><em>Passion For Programming</em></p>
+            <p style="text-align: center";><em>Identify. Code. Solve.</em></p>
             
        </div>  
 
         <div> 
             <img class="about" src="./assets/me.jpg" alt="Photo of Me" >
-            <p style="text-align: center;"><b>Irfan Haziq bin Mohd Rathuan</b></p>
+            <p style="text-align: center;"><b>Irfan Haziq</b></p>
         </div>
 
         <div> 
-            <p class="double"> 
-                Hi! I'm Irfan. I'm currently in my second year of my computer science degree at Universiti Teknologi Petronas. 
-                My journey into this field started when I was playing a programming based game about a decade ago.  
-                Over the past two years, I've learnt tons of stuff! From programming languages and algorithms to computer networks and software engineering. 
-                Now, as I'm approaching my internship, I aim to act like a sponge and absorb as much knowledge as I can! <br>
-                I also enjoy gaming on the side. I'm especially fond of games like Valorant and Rainbow Six: Siege
-            </p>
+            <div>
+                <p class="double">
+                    Hi! I'm Irfan, a final-year Computer Science student at Universiti Teknologi Petronas, graduating in 2025. 
+                    My journey in programming began with a coding-based game, and over the years, I’ve developed skills in programming, algorithms, and software engineering.
+                </p>
+                <p class="double">
+                    I’m now looking for an entry-level position where I can apply my skills, solve real-world problems, and continue learning. 
+                    Outside of coding, I enjoy gaming and exploring new technologies — it keeps me curious and creative.
+                </p>
+            </div>
         </div>
         
         <div class="container-middle" style="text-align: center; margin-top: 5%;">
             <p style="text-align: center";><em>I'm good at</em></p>
             <div class="tab-container">
-                <div class="tab-changer" onclick="switchTab('programming')" id = "tabprogramming">Programming</div>
-                <div class="tab-changer" onclick="switchTab('art')" id = "tabart">Art</div>
-                <div class="tab-changer" onclick="switchTab('data')" id = "tabdata">Data</div>
-                <div class="tab-changer" onclick="switchTab('gameDev')" id = "tabgameDev">Game Dev</div>
+                <div class="tab-changer" onclick="switchTab('tab1')" id = "tab1">Programming</div>
+                <div class="tab-changer" onclick="switchTab('tab2')" id = "tab2">Data</div>
+                <div class="tab-changer" onclick="switchTab('tab3')" id = "tab3">Tools</div>
+                <div class="tab-changer" onclick="switchTab('tab4')" id = "tab4">Design</div>
             </div>
             
-            <div class="tab-display", id="tabDisplay">
+            <div class="tab-display" id="tabDisplay">
             </div>
 
         </div>
@@ -137,14 +141,15 @@
         <div style="margin: auto;">
             <p class="contact" onclick="navigator.clipboard.writeText('+60169225854');">+60169225854 <img src="contact/copy.png"></img></p>
             <p class="contact" onclick="navigator.clipboard.writeText('irfan_21001145@utp.edu.my');">irfan_21001145@utp.edu.my<img src="contact/copy.png"></img></p>
+            <p class="contact" onclick="navigator.clipboard.writeText('irfan_21001145@utp.edu.my');">irfnhazq@gmail.com<img src="contact/copy.png"></img></p>
         </div>
         <div class="contact-container">
-            <a href="https://discordapp.com/users/234874896931487745" style= "height: 100%" target="_blank" rel="noopener noreferrer"><img src="./contact/1.png" alt="" height="100%" width="auto"></a>
             <a href="mailto:irfan_21001145@utp.edu.my" style= "height: 100%" target="_blank" rel="noopener noreferrer"><img src="./contact/2.png" alt="" height="100%" width="auto"></a>
             <a href="https://t.me/Sagrator" style= "height: 100%" target="_blank" rel="noopener noreferrer"><img src="./contact/3.png" alt="" height="100%" width="auto"></a>
             <a href="https://github.com/Sagraetor?tab=repositories" style= "height: 100%" target="_blank" rel="noopener noreferrer"><img src="./contact/4.png" alt="" height="100%" width="auto"></a>
             <a href="https://www.linkedin.com/in/irfan-haziq-757b682ab/" style= "height: 100%" target="_blank" rel="noopener noreferrer"><img src="./contact/5.png" alt="" height="100%" width="auto"></a>
             <a href="https://api.whatsapp.com/send?phone=60169225854" style= "height: 100%" target="_blank" rel="noopener noreferrer"><img src="./contact/6.png" alt="" height="100%" width="auto"></a>
+            <a href="https://discordapp.com/users/234874896931487745" style= "height: 100%" target="_blank" rel="noopener noreferrer"><img src="./contact/1.png" alt="" height="100%" width="auto"></a>
         </div>
     </div>
 
@@ -213,15 +218,8 @@
         })
 
         var homeTimeline = gsap.timeline()
-        homeTimeline.to(".home-container", {ease: "none", text: "Welcome", duration: 1}, "1")
-        homeTimeline.to(".home-container", {ease: "none", text: "", duration: .5}, ">.5")
-        homeTimeline.to(".home-container", {ease: "none", text: "I'm a programmer", duration: .7}, ">")
-        homeTimeline.to(".home-container", {ease: "none", text: {value: "I'm a developer", type: "diff"}, duration: .5}, ">.1")
-        homeTimeline.to(".home-container", {ease: "none", text: {value: "I'm a student", type: "diff"}, duration: .5}, ">.1")
-        homeTimeline.to(".home-container", {ease: "none", text: {value: "I'm a gamer", type: "diff"}, duration: .5}, ">.1")
-        homeTimeline.to(".home-container", {ease: "none", text: {value: "I'm an innovator", type: "diff"}, duration: .5}, ">.1")
-        homeTimeline.to(".home-container", {ease: "none", text: {value: "I'm Irfan", type: "diff"}, duration: .5}, ">.1")
-        homeTimeline.to(".home-container", {ease: "none", text: {value: "Irfan Haziq", type: "diff"}, duration: .5}, ">.5")
+        homeTimeline.to(".name", {ease: "none", text: "I'm Irfan Haziq", duration: 1}, ">1")
+        homeTimeline.to(".titles", {opacity: 1, duration: 2, ease: "power2.out", delay: .5});
         homeTimeline.play()
 
         

@@ -137,16 +137,22 @@ footer {
     z-index: 10
 }
 
-.home-container{
+.home-container {
     display: flex;
+    flex-direction: column; 
     justify-content: center;
     align-items: center;
-    position: static;
     background-color: rgba(0, 0, 0, 0);
     color: var(--green);
     text-align: center;
     font-size: 7vw;
     height: 100vh;
+    gap: 1rem;
+}
+
+.home-container .titles {
+    font-size: 4vw;
+    opacity: 0;
 }
 
 img.about{
