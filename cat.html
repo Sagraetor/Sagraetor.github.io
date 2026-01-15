@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Irfan Haziq</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        :root {
+            --black:  #333232;
+            --white:  #dae3e5;
+            --green:  #08DDA5;
+            --darkGreen: #06513D;
+            --blue:   #4281a4;
+            --orange: #ea8c55;
+        }
+        
+        .cat-container {
+            display: flex;
+            height: calc(100vh - 2 * 5.4em);
+            background-color: var(--white);
+            margin: 0 5% 0 5%;
+            padding: 2%;
+            border-radius: 10px;
+            position: static;
+            overflow: hidden;
+            flex-direction: column; 
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .cat-container.playing {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .swipe-container {
+            width: 100%;
+            height: 100%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .cat-card {
+            position: absolute;
+            width: 90%;
+            max-width: 500px;
+            height: 70vh;
+            max-height: 700px;
+            background: white;
+            border-radius: 25px;
+            overflow: hidden;
+            cursor: grab;
+            touch-action: pan-y;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .cat-card:active {
+            cursor: grabbing;
+        }
+        
+        .cat-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            pointer-events: none;
+        }
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            border-radius: 25px;
+            mix-blend-mode: multiply;
+        }
+        
+        .like-overlay {
+            background: rgba(8, 221, 165, 0.7);
+        }
+        
+        .dislike-overlay {
+            background: rgba(255, 107, 107, 0.7);
+        }
+        
+        button {
+            background: var(--green);
+            color: var(--black);
+            border: none;
+            padding: 1em 3em;
+            font-size: 1.1em;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            font-family: "Lato", sans-serif;
+            box-shadow: 0 5px 15px rgba(8, 221, 165, 0.3);
+        }
+        
+        button:hover {
+            background: var(--darkGreen);
+            color: var(--white);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(8, 221, 165, 0.4);
+        }
+
+        .hidden{
+          display: none;
+        }
+
+        @media only screen and (max-width: 768px) {
+            .cat-container {
+                margin: 0;
+                border-radius: 0;
+                padding: 1%;
+                height: calc(100vh - 4.2em);;
+            }
+            
+            .cat-card {
+                width: 95%;
+                height: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body style="background-color: var(--black)">
+
+    <div class="top-bar" id="topBar" style="position: static;">
+        <a href="index.html" class="bar-text hover-dark" style="padding: 0;">
+            <img src="./assets/sagrator-icon.png"></a>
+        <a href="index.html" class="bar-text hover-dark">ABOUT</a>
+        <a href="index.html" class="bar-text hover-dark"> PROJECTS</a>
+        <a href="index.html" class="bar-text hover-dark"> CONTACT</a>
+        <a class="bar-text hover-dark"> CATS</a>
+    </div>
+
+    <div class="cat-container" id="contact">
+        <div class="intro-content">
+          <h2>Find out what cat pictures you like best!</h2>
+          <p style="text-align: center; margin-bottom: 2em;"><em>Swipe right for like, left for dislike. Use arrow keys or A/D keys on desktop.</em></p>
+          <button id="startButton">Start Swiping</button>
+        </div>
+        <div class="swipe-container">
+
+        </div>
+    </div>
+    
+    <div class = "bg", id="div1">
+        <canvas id="myCanvas"></canvas>
+    </div>
+
+    <div class="gap hidden" id="results">
+        <p>RESULTS</p>
+    </div>
+
+    <div class="content-container hidden" style="gap: 10px">
+        <div class="container-middle">
+            <h2>You liked these cats!</h2>
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Flip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/TextPlugin.min.js"></script>
+    <script src="circles.js"></script>
+
+<script>
+  const button = document.getElementById("startButton");
+  const container = document.querySelector(".cat-container");
+  const introContent = document.querySelector('.intro-content');
+  const swipeContainer = document.querySelector('.swipe-container');
+  
+  // CONFIGURATION - Set how many cats you want
+  const TOTAL_CATS = 15; // Change this number to load more or fewer cats
+
+  const isDesktop = window.matchMedia("(min-width: 769px)").matches || 
+                     !('ontouchstart' in window || navigator.maxTouchPoints > 0);
+  
+  let cats = [];
+  let usedCats = 0; // Track how many cats we've used
+  let cards = [];
+  let startX = 0;
+  let startY = 0;
+  let currentX = 0;
+  let currentY = 0;
+  let isDragging = false;
+
+  function swapDisplay(){
+    introContent.style.display = "none";
+    swipeContainer.style.display = "flex"
+    container.classList.add("playing");
+  }
+
+  function createCard(cat, cardIndex) {
+    const card = document.createElement('div');
+    card.className = 'cat-card';
+    card.dataset.cardIndex = cardIndex;
+    
+    // Set z-index so cards stack on top of each other
+    card.style.zIndex = TOTAL_CATS - cardIndex;
+    
+    // Create overlays instead of text indicators
+    const likeOverlay = document.createElement('div');
+    likeOverlay.className = 'overlay like-overlay';
+    likeOverlay.style.opacity = '0';
+    
+    const dislikeOverlay = document.createElement('div');
+    dislikeOverlay.className = 'overlay dislike-overlay';
+    dislikeOverlay.style.opacity = '0';
+    
+    const img = document.createElement('img');
+    img.src = cat.url;
+    img.alt = `Cat ${cat.id}`;
+    img.loading = 'lazy';
+    
+    card.appendChild(likeOverlay);
+    card.appendChild(dislikeOverlay);
+    card.appendChild(img);
+    
+    // Add event listeners for mouse/touch
+    card.addEventListener('mousedown', startDrag);
+    card.addEventListener('touchstart', startDragTouch, { passive: false });
+    
+    return card;
+  }
+
+  function updateCardPositions() {
+    cards.forEach((card, index) => {
+      // Set z-index so cards stack properly
+      const zIndex = TOTAL_CATS - index;
+      card.style.zIndex = zIndex;
+      
+      // Reset position and opacity for all cards
+      gsap.set(card, {
+        x: 0,
+        y: 0,
+        rotation: 0,
+      });
+      
+      // Hide overlays
+      const likeOverlay = card.querySelector('.like-overlay');
+      const dislikeOverlay = card.querySelector('.dislike-overlay');
+      if (likeOverlay) gsap.set(likeOverlay, { opacity: 0 });
+      if (dislikeOverlay) gsap.set(dislikeOverlay, { opacity: 0 });
+    });
+  }
+
+  function startDrag(e) {
+    if (cards.length === 0 || isDragging) return;
+    
+    const card = cards[0];
+    isDragging = true;
+    startX = e.clientX;
+    startY = e.clientY;
+    currentX = 0;
+    currentY = 0;
+    
+    card.style.cursor = 'grabbing';
+    
+    document.addEventListener('mousemove', drag);
+    document.addEventListener('mouseup', endDrag);
+  }
+
+  function startDragTouch(e) {
+    if (cards.length === 0 || isDragging) return;
+    
+    e.preventDefault();
+    const card = cards[0];
+    isDragging = true;
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    currentX = 0;
+    currentY = 0;
+    
+    document.addEventListener('touchmove', dragTouch, { passive: false });
+    document.addEventListener('touchend', endDrag);
+  }
+
+  function drag(e) {
+    if (!isDragging) return;
+    
+    const card = cards[0];
+    currentX = e.clientX - startX;
+    currentY = e.clientY - startY;
+    
+    const rotation = (currentX / 20);
+    
+    gsap.to(card, {
+      x: currentX,
+      y: currentY,
+      rotation: rotation,
+      duration: 0.1
+    });
+    
+    updateOverlays(card, currentX);
+  }
+
+  function dragTouch(e) {
+    if (!isDragging) return;
+    
+    e.preventDefault();
+    const card = cards[0];
+    currentX = e.touches[0].clientX - startX;
+    currentY = e.touches[0].clientY - startY;
+    
+    const rotation = (currentX / 20);
+    
+    gsap.to(card, {
+      x: currentX,
+      y: currentY,
+      rotation: rotation,
+      duration: 0.1
+    });
+    
+    updateOverlays(card, currentX);
+  }
+
+  function updateOverlays(card, dragX) {
+    const likeOverlay = card.querySelector('.like-overlay');
+    const dislikeOverlay = card.querySelector('.dislike-overlay');
+    
+    if (dragX > 100) {
+      // Show green overlay for like
+      gsap.to(likeOverlay, { opacity: 0.9, duration: 0.01 });
+      gsap.to(dislikeOverlay, { opacity: 0, duration: 0.01 });
+    } else if (dragX < -100) {
+      // Show red overlay for dislike
+      gsap.to(dislikeOverlay, { opacity: 0.9, duration: 0.01 });
+      gsap.to(likeOverlay, { opacity: 0, duration: 0.01 });
+    } else {
+      // Hide both overlays when in neutral position
+      gsap.to(likeOverlay, { opacity: 0, duration: 0.01 });
+      gsap.to(dislikeOverlay, { opacity: 0, duration: 0.01 });
+    }
+  }
+
+  function endDrag() {
+    if (!isDragging) return;
+    
+    const card = cards[0];
+    isDragging = false;
+    
+    document.removeEventListener('mousemove', drag);
+    document.removeEventListener('touchmove', dragTouch);
+    document.removeEventListener('mouseup', endDrag);
+    document.removeEventListener('touchend', endDrag);
+    
+    card.style.cursor = 'grab';
+    
+    const threshold = 150;
+    
+    if (Math.abs(currentX) > threshold) {
+      const direction = currentX > 0 ? 'right' : 'left';
+      swipeCard(direction);
+    } else {
+      gsap.to(card, {
+        x: 0,
+        y: 0,
+        rotation: 0,
+        duration: 0.3,
+        ease: "back.out(1.2)"
+      });
+      
+      const likeOverlay = card.querySelector('.like-overlay');
+      const dislikeOverlay = card.querySelector('.dislike-overlay');
+      gsap.to([likeOverlay, dislikeOverlay], { opacity: 0, duration: 0.2 });
+    }
+  }
+
+  function finished(){
+    swipeContainer.innerHTML = `<div><h2>No more cats!</h2><p>You've swiped through all ${TOTAL_CATS} cats</p><p>Refresh to start again</p></div>`;
+    
+    const contentContainer = document.querySelector('.content-container');
+    const gap = document.querySelector('.gap');
+    
+    contentContainer.classList.remove('hidden');
+    gap.classList.remove('hidden');
+
+    gsap.to(window, { duration: .5, scrollTo: {y: '#results', autoKill: true }});
+  }
+
+  function swipeCard(direction) {
+    if (cards.length === 0) return;
+    
+    const card = cards[0];
+    const screenWidth = window.innerWidth;
+    const exitX = direction === 'right' ? screenWidth * 1.5 : -screenWidth * 1.5;
+    
+    // Show final overlay before swiping out
+    const overlay = direction === 'right' 
+      ? card.querySelector('.like-overlay')
+      : card.querySelector('.dislike-overlay');
+    gsap.to(overlay, { opacity: 0.9, duration: 0.01 });
+
+    if (direction === 'right') {
+        const imgElement = card.querySelector('img');
+        const catUrl = imgElement.src;
+        
+        // Create simple image element
+        const likedImg = document.createElement('img');
+        likedImg.src = catUrl;
+        likedImg.alt = "Liked cat";
+        
+        // Add to content container
+        const contentContainer = document.querySelector('.content-container');
+        contentContainer.appendChild(likedImg)
+    }
+    
+    cards.shift();
+    // Animate card out
+    gsap.to(card, {
+      x: exitX,
+      rotation: direction === 'right' ? 30 : -30,
+      duration: 0.4,
+      ease: "power2.out",
+      onComplete: () => {
+        // Simply hide the card instead of removing it
+        card.style.display = 'none';
+        
+        if (usedCats < cats.length) {
+          usedCats++;
+        }
+        
+        if (cards.length === 0) {
+          finished();
+        }
+      }
+    });
+  }
+
+  function likeCurrentCard() {
+    if (cards.length === 0) return;
+    
+    const card = cards[0];
+    const likeOverlay = card.querySelector('.like-overlay');
+    
+    // Show green overlay
+    gsap.to(likeOverlay, { opacity: 0.7, duration: 0.01 });
+    gsap.to(card, {
+      x: 100,
+      rotation: 10,
+      duration: 0.2,
+      onComplete: () => {
+        swipeCard('right');
+      }
+    });
+  }
+
+  function dislikeCurrentCard() {
+    if (cards.length === 0) return;
+    
+    const card = cards[0];
+    const dislikeOverlay = card.querySelector('.dislike-overlay');
+    
+    // Show red overlay
+    gsap.to(dislikeOverlay, { opacity: 0.7, duration: 0.01 });
+    gsap.to(card, {
+      x: -100,
+      rotation: -10,
+      duration: 0.2,
+      onComplete: () => {
+        swipeCard('left');
+      }
+    });
+  }
+
+  button.addEventListener("click", async () => {
+    button.textContent = `Loading cats... 🐱`;
+    button.disabled = true;
+
+    try {
+      const catPromises = [];
+      for (let i = 0; i < TOTAL_CATS; i++) {
+        catPromises.push(
+          fetch("https://cataas.com/cat?json=true")
+            .then(res => {
+              if (!res.ok) throw new Error(`HTTP ${res.status}`);
+              return res.json();
+            })
+            .catch(err => {
+              console.warn(`Failed to fetch cat ${i}:`, err);
+              return null;
+            })
+        );
+      }
+
+      const catDataArray = await Promise.all(catPromises);
+      
+      cats = catDataArray
+        .filter(data => data && data.id)
+        .map(data => ({
+          id: data.id,
+          tags: data.tags || [],
+          url: `https://cataas.com/cat/${data.id}?width=600&height=600`
+        }));
+
+      if (cats.length === 0) {
+        throw new Error("No cats could be loaded. Please try again.");
+      }
+      
+      button.textContent = "Loading images... 🐾";
+      await preloadImages(cats.map(c => c.url));
+
+      swapDisplay();
+      
+      for (let i = 0; i < cats.length; i++) {
+        const card = createCard(cats[i], i);
+        swipeContainer.appendChild(card);
+        cards.push(card);
+      }
+      
+      updateCardPositions();
+      
+      usedCats = 0;
+
+    } catch (err) {
+      console.error("Error in cat loading:", err);
+      button.textContent = "Error loading cats 😿";
+      button.disabled = false;
+      button.onclick = () => window.location.reload();
+    }
+  });
+
+  // Preload helper
+  function preloadImages(urls) {
+    return Promise.all(
+      urls.map(url => {
+        return new Promise((resolve) => {
+          const img = new Image();
+          img.src = url;
+          img.onload = resolve;
+          img.onerror = resolve; // Don't fail if one image fails
+        });
+      })
+    );
+  }
+
+
+  if (isDesktop){
+    document.addEventListener("keydown", (e) => {
+    if (!cats.length || cards.length === 0) return;
+    switch(e.key.toLowerCase()) {
+      case 'arrowright':
+      case 'd':
+        e.preventDefault();
+        likeCurrentCard();
+        break;
+        
+      case 'arrowleft':
+      case 'a':
+        e.preventDefault();
+        dislikeCurrentCard();
+        break;
+    }
+  });
+  }
+  
+
+  // Prevent scrolling while dragging on touch devices
+  document.addEventListener('touchmove', (e) => {
+    if (isDragging) {
+      e.preventDefault();
+    }
+  }, { passive: false });
+
+</script>
+</body>
+</html>

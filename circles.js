@@ -108,10 +108,31 @@ function setSpawnInterval() {
     }
 }
 
+function pauseAnimation() {
+    clearInterval(drawInterval);
+    clearInterval(spawnMovingCircleInterval);
+    gsap.globalTimeline.pause();
+}
+
+function resumeAnimation() {
+    drawInterval = setInterval(drawLine, 10);
+    setSpawnInterval();
+    gsap.globalTimeline.resume();
+}
+
 var spawnMovingCircleInterval
 
 window.addEventListener('resize', resizeCanvas, false);
 window.addEventListener('resize', setSpawnInterval, false);
 setSpawnInterval()
 resizeCanvas()
-setInterval(drawLine, 10);
+
+var drawInterval = setInterval(drawLine, 10)
+
+document.addEventListener("visibilitychange", function () {
+    if (document.hidden) {
+        pauseAnimation();
+    } else {
+        resumeAnimation();
+    }
+});

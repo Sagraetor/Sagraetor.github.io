@@ -18,27 +18,6 @@
             --blue:   #4281a4;
             --orange: #ea8c55;
         }
-        .circle {
-            display: inline-block;
-            background: var(--white);
-            border-radius: 50%;
-            height: 10px;
-            width: 10px;
-            margin: 0;
-            position: absolute;
-            z-index: -1;
-        }
-
-        .bg{
-            display: block;
-            margin: 0;
-            position: fixed;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            z-index: -1;
-        }
     </style>
 
 
@@ -52,15 +31,16 @@
         <a onclick="gsap.to(window, { duration: .5, scrollTo: {y: '#about', offsetY: vh(3), autoKill: true }})" class="bar-text hover-dark">ABOUT</a>
         <a onclick="switchTab('tab1'); gsap.to(window, { duration: .5, scrollTo: {y: '#projects', offsetY: vh(3), autoKill: true }})" class="bar-text hover-dark"> PROJECTS</a>
         <a onclick="gsap.to(window, { duration: .5, scrollTo: {y: '#contact', offsetY: vh(3), autoKill: true }})" class="bar-text hover-dark"> CONTACT</a>
+        <a href="cat.html" class="bar-text hover-dark"> CATS</a>
     </div>
 
     <div class = "bg", id="div1">
-        <canvas id="myCanvas" style="z-index: -1"></canvas>
+        <canvas id="myCanvas"></canvas>
     </div>
 
     <div class = "home-container" id="home">
         <div class="name">Welcome</div>
-        <div class="titles">Developer | CS Student | Problem Solver</div>
+        <div class="titles">Developer | Analyst | Problem Solver</div>
     </div>
 
     <div class="content-container" id="about">
@@ -71,7 +51,7 @@
        </div>  
 
         <div> 
-            <img class="about" src="./assets/me.jpg" alt="Photo of Me" >
+            <img class="about" src="./assets/me.jpeg" alt="Photo of Me" >
             <p style="text-align: center;"><b>Irfan Haziq</b></p>
         </div>
 
