@@ -31,10 +31,7 @@
         }
         
         .cat-container.playing {
-            display: flex;
             flex-direction: row;
-            align-items: center;
-            justify-content: center;
         }
         
         .swipe-container {
@@ -44,6 +41,7 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
+            position: relative;
         }
         
         .cat-card {
@@ -56,10 +54,13 @@
             border-radius: 25px;
             overflow: hidden;
             cursor: grab;
-            touch-action: pan-y;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            touch-action: none;
+            top: 0;
+            left: 0;
+            margin: auto;
+            inset: 0;
+            user-select: none;
+            -webkit-user-select: none;
         }
         
         .cat-card:active {
@@ -71,7 +72,9 @@
             height: 100%;
             object-fit: cover;
             pointer-events: none;
+            display: block;
         }
+        
         .overlay {
             position: absolute;
             top: 0;
@@ -79,7 +82,7 @@
             width: 100%;
             height: 100%;
             opacity: 0;
-            transition: opacity 0.3s;
+            transition: opacity 0.2s;
             pointer-events: none;
             border-radius: 25px;
             mix-blend-mode: multiply;
@@ -114,27 +117,43 @@
             box-shadow: 0 8px 20px rgba(8, 221, 165, 0.4);
         }
 
-        .hidden{
-          display: none;
+        .hidden {
+            display: none;
         }
+        
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+            position: relative;
+        }        
 
         @media only screen and (max-width: 768px) {
             .cat-container {
-                margin: 0;
                 border-radius: 0;
-                padding: 1%;
-                height: calc(100vh - 4.2em);;
+                padding: 2%;
+                height: 90vh;
+                overflow: hidden;
+                margin: 0;
+            }
+
+            .cat-container.playing {
+                margin-top: 5vh;
+            }
+            
+            .top-bar.playing {
+                display: none;
             }
             
             .cat-card {
                 width: 95%;
-                height: 100%;
+                height: 65vh;
+                touch-action: none;
             }
         }
     </style>
 </head>
 
-<body style="background-color: var(--black)">
+<body style="background-color: var(--black); overflow-x: hidden;">
 
     <div class="top-bar" id="topBar" style="position: static;">
         <a href="index.html" class="bar-text hover-dark" style="padding: 0;">
@@ -156,7 +175,7 @@
         </div>
     </div>
     
-    <div class = "bg", id="div1">
+    <div class="bg" id="div1">
         <canvas id="myCanvas"></canvas>
     </div>
 
@@ -182,26 +201,30 @@
   const container = document.querySelector(".cat-container");
   const introContent = document.querySelector('.intro-content');
   const swipeContainer = document.querySelector('.swipe-container');
+  const topBar = document.querySelector('.top-bar');
   
-  // CONFIGURATION - Set how many cats you want
-  const TOTAL_CATS = 15; // Change this number to load more or fewer cats
+  const TOTAL_CATS = 15;
 
   const isDesktop = window.matchMedia("(min-width: 769px)").matches || 
                      !('ontouchstart' in window || navigator.maxTouchPoints > 0);
   
   let cats = [];
-  let usedCats = 0; // Track how many cats we've used
+  let usedCats = 0;
   let cards = [];
   let startX = 0;
   let startY = 0;
   let currentX = 0;
   let currentY = 0;
   let isDragging = false;
+  const THRESHOLD = 150;
 
   function swapDisplay(){
     introContent.style.display = "none";
-    swipeContainer.style.display = "flex"
+    swipeContainer.style.display = "flex";
     container.classList.add("playing");
+    topBar.classList.add('playing');
+    
+    document.body.style.overflow = 'hidden';
   }
 
   function createCard(cat, cardIndex) {
@@ -209,10 +232,8 @@
     card.className = 'cat-card';
     card.dataset.cardIndex = cardIndex;
     
-    // Set z-index so cards stack on top of each other
     card.style.zIndex = TOTAL_CATS - cardIndex;
     
-    // Create overlays instead of text indicators
     const likeOverlay = document.createElement('div');
     likeOverlay.className = 'overlay like-overlay';
     likeOverlay.style.opacity = '0';
@@ -229,32 +250,28 @@
     card.appendChild(likeOverlay);
     card.appendChild(dislikeOverlay);
     card.appendChild(img);
-    
-    // Add event listeners for mouse/touch
+
     card.addEventListener('mousedown', startDrag);
     card.addEventListener('touchstart', startDragTouch, { passive: false });
     
     return card;
   }
 
-  function updateCardPositions() {
+  function positionCards() {
     cards.forEach((card, index) => {
-      // Set z-index so cards stack properly
-      const zIndex = TOTAL_CATS - index;
-      card.style.zIndex = zIndex;
-      
-      // Reset position and opacity for all cards
-      gsap.set(card, {
-        x: 0,
-        y: 0,
-        rotation: 0,
-      });
-      
-      // Hide overlays
-      const likeOverlay = card.querySelector('.like-overlay');
-      const dislikeOverlay = card.querySelector('.dislike-overlay');
-      if (likeOverlay) gsap.set(likeOverlay, { opacity: 0 });
-      if (dislikeOverlay) gsap.set(dislikeOverlay, { opacity: 0 });
+        const zIndex = TOTAL_CATS - index;
+        card.style.zIndex = zIndex;
+        
+        gsap.set(card, {
+            x: 0,
+            y: 0,
+            rotation: 0,
+        });
+        
+        const likeOverlay = card.querySelector('.like-overlay');
+        const dislikeOverlay = card.querySelector('.dislike-overlay');
+        if (likeOverlay) likeOverlay.style.opacity = '0';
+        if (dislikeOverlay) dislikeOverlay.style.opacity = '0';
     });
   }
 
@@ -272,6 +289,9 @@
     
     document.addEventListener('mousemove', drag);
     document.addEventListener('mouseup', endDrag);
+    
+    document.body.style.userSelect = 'none';
+    document.body.style.webkitUserSelect = 'none';
   }
 
   function startDragTouch(e) {
@@ -332,18 +352,23 @@
     const likeOverlay = card.querySelector('.like-overlay');
     const dislikeOverlay = card.querySelector('.dislike-overlay');
     
-    if (dragX > 100) {
-      // Show green overlay for like
-      gsap.to(likeOverlay, { opacity: 0.9, duration: 0.01 });
-      gsap.to(dislikeOverlay, { opacity: 0, duration: 0.01 });
-    } else if (dragX < -100) {
-      // Show red overlay for dislike
-      gsap.to(dislikeOverlay, { opacity: 0.9, duration: 0.01 });
-      gsap.to(likeOverlay, { opacity: 0, duration: 0.01 });
+    if (dragX > THRESHOLD) {
+      likeOverlay.style.opacity = '0.8';
+      dislikeOverlay.style.opacity = '0';
+    } else if (dragX < -THRESHOLD) {
+      dislikeOverlay.style.opacity = '0.8';
+      likeOverlay.style.opacity = '0';
+    } else if (dragX > 0) {
+      const opacity = Math.min(0.8 * (dragX / THRESHOLD), 0.8);
+      likeOverlay.style.opacity = opacity.toString();
+      dislikeOverlay.style.opacity = '0';
+    } else if (dragX < 0) {
+      const opacity = Math.min(0.8 * (Math.abs(dragX) / THRESHOLD), 0.8);
+      dislikeOverlay.style.opacity = opacity.toString();
+      likeOverlay.style.opacity = '0';
     } else {
-      // Hide both overlays when in neutral position
-      gsap.to(likeOverlay, { opacity: 0, duration: 0.01 });
-      gsap.to(dislikeOverlay, { opacity: 0, duration: 0.01 });
+      likeOverlay.style.opacity = '0';
+      dislikeOverlay.style.opacity = '0';
     }
   }
 
@@ -360,7 +385,10 @@
     
     card.style.cursor = 'grab';
     
-    const threshold = 150;
+    document.body.style.userSelect = '';
+    document.body.style.webkitUserSelect = '';
+    
+    const threshold = THRESHOLD;
     
     if (Math.abs(currentX) > threshold) {
       const direction = currentX > 0 ? 'right' : 'left';
@@ -376,12 +404,13 @@
       
       const likeOverlay = card.querySelector('.like-overlay');
       const dislikeOverlay = card.querySelector('.dislike-overlay');
-      gsap.to([likeOverlay, dislikeOverlay], { opacity: 0, duration: 0.2 });
+      likeOverlay.style.opacity = '0';
+      dislikeOverlay.style.opacity = '0';
     }
   }
 
   function finished(){
-    swipeContainer.innerHTML = `<div><h2>No more cats!</h2><p>You've swiped through all ${TOTAL_CATS} cats</p><p>Refresh to start again</p></div>`;
+    swipeContainer.innerHTML = `<div style="text-align: center; padding: 2em;"><h2>No more cats!</h2><p>You've swiped through all ${TOTAL_CATS} cats</p><p>Refresh to start again</p></div>`;
     
     const contentContainer = document.querySelector('.content-container');
     const gap = document.querySelector('.gap');
@@ -390,6 +419,9 @@
     gap.classList.remove('hidden');
 
     gsap.to(window, { duration: .5, scrollTo: {y: '#results', autoKill: true }});
+
+    topBar.classList.remove('playing');
+    container.classList.remove('playing');
   }
 
   function swipeCard(direction) {
@@ -399,35 +431,30 @@
     const screenWidth = window.innerWidth;
     const exitX = direction === 'right' ? screenWidth * 1.5 : -screenWidth * 1.5;
     
-    // Show final overlay before swiping out
-    const overlay = direction === 'right' 
-      ? card.querySelector('.like-overlay')
-      : card.querySelector('.dislike-overlay');
-    gsap.to(overlay, { opacity: 0.9, duration: 0.01 });
-
     if (direction === 'right') {
         const imgElement = card.querySelector('img');
         const catUrl = imgElement.src;
-        
-        // Create simple image element
+      
         const likedImg = document.createElement('img');
         likedImg.src = catUrl;
         likedImg.alt = "Liked cat";
+        likedImg.style.width = '300px';
+        likedImg.style.height = '300px';
+        likedImg.style.objectFit = 'cover';
+        likedImg.style.borderRadius = '15px';
+        likedImg.style.margin = '10px';
         
-        // Add to content container
         const contentContainer = document.querySelector('.content-container');
-        contentContainer.appendChild(likedImg)
+        contentContainer.appendChild(likedImg);
     }
     
     cards.shift();
-    // Animate card out
     gsap.to(card, {
       x: exitX,
       rotation: direction === 'right' ? 30 : -30,
       duration: 0.4,
       ease: "power2.out",
       onComplete: () => {
-        // Simply hide the card instead of removing it
         card.style.display = 'none';
         
         if (usedCats < cats.length) {
@@ -447,10 +474,9 @@
     const card = cards[0];
     const likeOverlay = card.querySelector('.like-overlay');
     
-    // Show green overlay
-    gsap.to(likeOverlay, { opacity: 0.7, duration: 0.01 });
+    likeOverlay.style.opacity = '0.8';
     gsap.to(card, {
-      x: 100,
+      x: THRESHOLD + 50,
       rotation: 10,
       duration: 0.2,
       onComplete: () => {
@@ -465,10 +491,9 @@
     const card = cards[0];
     const dislikeOverlay = card.querySelector('.dislike-overlay');
     
-    // Show red overlay
-    gsap.to(dislikeOverlay, { opacity: 0.7, duration: 0.01 });
+    dislikeOverlay.style.opacity = '0.8';
     gsap.to(card, {
-      x: -100,
+      x: -(THRESHOLD + 50),
       rotation: -10,
       duration: 0.2,
       onComplete: () => {
@@ -522,7 +547,7 @@
         cards.push(card);
       }
       
-      updateCardPositions();
+      positionCards();
       
       usedCats = 0;
 
@@ -534,7 +559,6 @@
     }
   });
 
-  // Preload helper
   function preloadImages(urls) {
     return Promise.all(
       urls.map(url => {
@@ -542,12 +566,11 @@
           const img = new Image();
           img.src = url;
           img.onload = resolve;
-          img.onerror = resolve; // Don't fail if one image fails
+          img.onerror = resolve;
         });
       })
     );
   }
-
 
   if (isDesktop){
     document.addEventListener("keydown", (e) => {
@@ -568,8 +591,6 @@
   });
   }
   
-
-  // Prevent scrolling while dragging on touch devices
   document.addEventListener('touchmove', (e) => {
     if (isDragging) {
       e.preventDefault();
